@@ -1,0 +1,9 @@
+[
+  {
+    "id": "seiya2",
+    "label": "Seiya 2",
+    "url": "https://seiya2.netlify.app/",
+    "platform": "netlify",
+    "expectInBody": ["Saint Seiya", "Rebirth"]
+  }
+]

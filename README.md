@@ -1,93 +1,84 @@
-# Monitor Netlify — Saint Seiya Mirrors
+# Mirror check — Saint Seiya Rebirth 2 (EX)
 
-Landing page que verifica se os mirrors Netlify estão **no ar** ou **pausados** por limite de uso (créditos/bandwidth).
+Landing page que verifica se cada mirror está **no ar** ou **pausado** por limite de uso do host (Netlify, Vercel, etc.).
 
-Monitora por padrão:
-
-- https://ssrb2.netlify.app/
-- https://seiya2.netlify.app/
-- https://seiyaex.netlify.app/
+Monitor configurado em [`public/config/sites.json`](public/config/sites.json).
 
 ## Estados
 
 | Estado   | Significado                                      |
 |----------|--------------------------------------------------|
-| `active` | Site entrega o conteúdo real                     |
-| `paused` | Página de pausa/limit do Netlify detectada       |
+| `active` | Site entrega o conteúdo esperado                 |
+| `paused` | Página de pausa/limite do host detectada         |
 | `error`  | Timeout, rede ou HTTP 5xx                        |
 
-A checagem roda **ao abrir a página** e no botão **Verificar novamente** (sem polling automático).
-
 ## Desenvolvimento local
+
+**Netlify (API + static):**
 
 ```bash
 npm install
 npm run dev
 ```
 
-Abra a URL que o Netlify CLI mostrar (geralmente `http://localhost:8888`).
+**Vercel:**
 
-Testar o classificador de pausa:
+```bash
+npm install
+npx vercel dev
+```
+
+Testar o classificador:
 
 ```bash
 npm run test:detector
 ```
 
-## Adicionar outro site
+## Adicionar outro mirror
 
-Edite [`config/sites.json`](config/sites.json):
+Edite [`public/config/sites.json`](public/config/sites.json):
 
 ```json
 {
-  "id": "novo",
-  "label": "Meu Site",
-  "url": "https://exemplo.netlify.app/",
-  "expectInBody": ["texto único da home"]
+  "id": "seiya2-vercel",
+  "label": "Seiya 2 (Vercel)",
+  "url": "https://seiya2.vercel.app/",
+  "platform": "vercel",
+  "expectInBody": ["Saint Seiya", "Rebirth"]
 }
 ```
 
-`expectInBody` ajuda a distinguir o app real da página de erro do Netlify.
+| Campo | Descrição |
+|-------|-----------|
+| `platform` | `netlify`, `vercel` ou `generic` — regras de detecção de pausa |
+| `expectInBody` | Textos que devem aparecer na home quando o site está no ar |
 
-## Deploy no Netlify
+Se `platform` for omitido, é inferido pelo domínio (`.netlify.app`, `.vercel.app`).
 
-1. Crie um repositório no GitHub e envie este projeto.
-2. No [Netlify](https://app.netlify.com): **Add new site** → **Import an existing project**.
-3. O [`netlify.toml`](netlify.toml) já define:
-   - `publish = public`
-   - `functions = netlify/functions`
-   - redirect `/api/status` → function
-4. Deploy. A API fica em `https://SEU-SITE.netlify.app/api/status`.
+## Deploy
+
+### Vercel (recomendado para esta landing)
+
+1. Importe o repositório no [Vercel](https://vercel.com).
+2. O [`vercel.json`](vercel.json) define `outputDirectory: public` e a function em `api/status.js`.
+3. API: `https://SEU-PROJETO.vercel.app/api/status`
+
+### Netlify
+
+1. Importe no [Netlify](https://app.netlify.com).
+2. O [`netlify.toml`](netlify.toml) define `publish = public`, functions e redirect `/api/status`.
 
 ## Estrutura
 
 ```
-config/sites.json          # URLs monitoradas
-netlify/functions/status.js  # API de checagem
-netlify/functions/lib/detectPaused.js  # Detecção de pausa Netlify
-public/                    # Landing page (PT + EN)
+public/config/sites.json   # mirrors monitorados
+public/                    # landing
+api/status.js              # API (Vercel)
+netlify/functions/status.js
+lib/checkSites.js          # checagem compartilhada
+lib/classifySite.js        # detecção por plataforma
 ```
 
 ## API
 
 `GET /api/status`
-
-Resposta exemplo:
-
-```json
-{
-  "checkedAt": "2026-05-15T12:00:00.000Z",
-  "sites": [
-    {
-      "id": "ssrb2",
-      "label": "SSR B2",
-      "url": "https://ssrb2.netlify.app/",
-      "state": "active",
-      "httpStatus": 200,
-      "latencyMs": 340,
-      "reason": "ok",
-      "messagePt": "Site no ar",
-      "messageEn": "Site is serving content"
-    }
-  ]
-}
-```

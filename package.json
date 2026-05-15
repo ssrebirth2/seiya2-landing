@@ -6,7 +6,7 @@
   "scripts": {
     "build": "node -e \"console.log('Static site — no compile step')\"",
     "dev": "netlify dev",
-    "test:detector": "node netlify/functions/lib/detectPaused.test.js"
+    "test:detector": "node lib/classifySite.test.js"
   },
   "devDependencies": {
     "netlify-cli": "^23.0.0"
