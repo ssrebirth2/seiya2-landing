@@ -1,0 +1,13 @@
+{
+  "name": "netlify-site-monitor",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Monitor de sites Netlify — detecta sites pausados por limite de uso",
+  "scripts": {
+    "dev": "netlify dev",
+    "test:detector": "node netlify/functions/lib/detectPaused.test.js"
+  },
+  "devDependencies": {
+    "netlify-cli": "^23.0.0"
+  }
+}

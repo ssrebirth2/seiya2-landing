@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Monitor de mirrors Netlify — verifica se os sites estão ativos ou pausados por limite de uso.">
+  <title>Saint Seiya: Rebirth 2 (EX) Database - Mirrors</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+  <div class="galaxy" id="galaxy" aria-hidden="true">
+    <div class="galaxy__layer galaxy__layer--base"></div>
+    <div class="galaxy__nebulas" id="galaxy-nebulas">
+      <div class="galaxy__blob galaxy__blob--1"></div>
+      <div class="galaxy__blob galaxy__blob--2"></div>
+      <div class="galaxy__blob galaxy__blob--3"></div>
+    </div>
+    <canvas class="galaxy__stars" id="galaxy-stars" width="1" height="1"></canvas>
+    <div class="galaxy__layer galaxy__layer--dust"></div>
+  </div>
+  <div class="galaxy-scrim" aria-hidden="true"></div>
+
+  <main class="page">
+    <header class="hero">
+      <p class="hero__eyebrow">MADE BY @DIGSMARTINS</p>
+      <h1 class="hero__title">Saint Seiya: Rebirth 2 (EX) Database</h1>
+      <p class="hero__subtitle">mirror check</p>
+      <p class="hero__desc">
+        Verifica se cada página está <strong>no ar</strong> ou <strong>pausada</strong> por limite de uso do Netlify.
+      </p>
+      <p class="hero__desc hero__desc--en">
+        Checks whether each page is <strong>live</strong> or <strong>paused</strong> due to Netlify usage limits.
+      </p>
+    </header>
+
+    <div class="toolbar">
+      <p id="last-checked" class="last-checked" hidden>
+        <span class="last-checked__pt">Última verificação:</span>
+        <span class="last-checked__en">Last checked:</span>
+        <time id="checked-time"></time>
+      </p>
+    </div>
+
+    <div id="global-error" class="global-error" hidden role="alert"></div>
+
+    <section id="sites-grid" class="sites-grid" aria-live="polite" aria-busy="true">
+      <!-- cards injected by app.js -->
+    </section>
+
+    <footer class="footer">
+      <p class="footer__label">Comunidade oficial</p>
+      <p class="footer__label-en">Official community</p>
+      <a
+        class="discord-link"
+        href="https://discord.com/invite/JYSHChN5VM"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Entrar no Discord — Saint Seiya Rebirth 2 EX"
+      >
+        <svg class="discord-link__icon" viewBox="0 0 24 24" aria-hidden="true" fill="currentColor">
+          <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/>
+        </svg>
+        <span class="discord-link__text">
+          <span class="discord-link__pt">Saint Seiya: Rebirth 2 (EX)</span>
+          <span class="discord-link__en">Join on Discord</span>
+        </span>
+        <span class="discord-link__arrow" aria-hidden="true">→</span>
+      </a>
+    </footer>
+  </main>
+
+  <script src="/js/galaxy-bg.js" defer></script>
+  <script src="/js/app.js" defer></script>
+</body>
+</html>

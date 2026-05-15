@@ -1,0 +1,531 @@
+:root {
+  --bg: #0a0b10;
+  --surface: rgba(10, 12, 22, 0.88);
+  --border: rgba(255, 255, 255, 0.08);
+  --text: #e8eaf4;
+  --muted: #8b90a8;
+  --active: #34d399;
+  --active-glow: rgba(52, 211, 153, 0.35);
+  --paused: #f59e0b;
+  --paused-glow: rgba(245, 158, 11, 0.4);
+  --error: #f87171;
+  --error-glow: rgba(248, 113, 113, 0.3);
+  --checking: #a78bfa;
+  --accent: #6366f1;
+  --radius: 16px;
+  --font: "DM Sans", system-ui, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, monospace;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: var(--font);
+  color: var(--text);
+  background: #05060c;
+  line-height: 1.5;
+  overflow-x: hidden;
+}
+
+/* Galáxia — fundo decorativo (não interfere em cliques nem leitura) */
+.galaxy {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.galaxy__layer {
+  position: absolute;
+  inset: -12%;
+}
+
+.galaxy__layer--base {
+  background:
+    radial-gradient(ellipse 120% 80% at 50% 120%, #2a1860 0%, transparent 55%),
+    radial-gradient(ellipse 90% 60% at 10% 20%, #121a35 0%, transparent 50%),
+    linear-gradient(180deg, #030408 0%, #0c0e22 45%, #05060c 100%);
+}
+
+.galaxy__nebulas {
+  position: absolute;
+  inset: -20%;
+  will-change: transform;
+}
+
+.galaxy__blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(48px);
+  opacity: 0.92;
+  mix-blend-mode: screen;
+}
+
+.galaxy__blob--1 {
+  width: 62vmin;
+  height: 62vmin;
+  top: 5%;
+  right: 0;
+  background: radial-gradient(circle, rgba(129, 140, 248, 0.75) 0%, rgba(99, 102, 241, 0.2) 45%, transparent 72%);
+  animation: blob-float-1 22s ease-in-out infinite;
+}
+
+.galaxy__blob--2 {
+  width: 54vmin;
+  height: 54vmin;
+  bottom: 5%;
+  left: -5%;
+  background: radial-gradient(circle, rgba(192, 132, 252, 0.65) 0%, rgba(139, 92, 246, 0.18) 48%, transparent 74%);
+  animation: blob-float-2 28s ease-in-out infinite;
+}
+
+.galaxy__blob--3 {
+  width: 50vmin;
+  height: 50vmin;
+  top: 38%;
+  left: 32%;
+  background: radial-gradient(circle, rgba(96, 165, 250, 0.55) 0%, rgba(59, 130, 246, 0.15) 50%, transparent 70%);
+  animation: blob-float-3 18s ease-in-out infinite;
+}
+
+.galaxy__stars {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 1;
+}
+
+.galaxy__layer--dust {
+  background:
+    radial-gradient(ellipse 100% 55% at 50% -5%, rgba(255, 255, 255, 0.07) 0%, transparent 50%),
+    radial-gradient(ellipse 80% 40% at 50% 100%, rgba(99, 102, 241, 0.08) 0%, transparent 55%);
+  animation: dust-pulse 10s ease-in-out infinite alternate;
+}
+
+.galaxy-scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  /* Vignette leve nas bordas — centro deixa a galáxia aparecer */
+  background:
+    radial-gradient(ellipse 75% 55% at 50% 45%, transparent 0%, rgba(5, 6, 12, 0.2) 100%),
+    radial-gradient(ellipse 100% 100% at 50% 50%, transparent 35%, rgba(5, 6, 12, 0.45) 100%),
+    linear-gradient(
+      180deg,
+      rgba(5, 6, 12, 0.22) 0%,
+      rgba(5, 6, 12, 0.08) 42%,
+      rgba(5, 6, 12, 0.25) 100%
+    );
+}
+
+@keyframes blob-float-1 {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(-4%, 6%) scale(1.08);
+  }
+  66% {
+    transform: translate(3%, -4%) scale(0.95);
+  }
+}
+
+@keyframes blob-float-2 {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+  }
+  40% {
+    transform: translate(6%, -5%) scale(1.1);
+  }
+  70% {
+    transform: translate(-5%, 4%) scale(0.92);
+  }
+}
+
+@keyframes blob-float-3 {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.65;
+  }
+  50% {
+    transform: translate(-6%, 5%) scale(1.12);
+    opacity: 0.88;
+  }
+}
+
+@keyframes dust-pulse {
+  0% {
+    opacity: 0.85;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .galaxy__nebulas {
+    will-change: auto;
+  }
+
+  .galaxy__blob,
+  .galaxy__layer--dust {
+    animation: none;
+  }
+}
+
+.page {
+  position: relative;
+  z-index: 2;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 2.5rem 1.25rem 3rem;
+}
+
+.hero {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.hero__eyebrow {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin: 0 0 0.5rem;
+}
+
+.hero__title {
+  font-size: clamp(1.75rem, 5vw, 2.5rem);
+  font-weight: 700;
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+.hero__subtitle {
+  font-size: 1rem;
+  color: var(--muted);
+  margin: 0.25rem 0 1rem;
+  font-weight: 400;
+}
+
+.hero__desc {
+  margin: 0 auto;
+  max-width: 36rem;
+  color: var(--text);
+  font-size: 1rem;
+}
+
+.hero__desc--en {
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+
+.hero__desc strong {
+  color: #fff;
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 1.75rem;
+}
+
+.last-checked {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--muted);
+  text-align: center;
+}
+
+.last-checked__en {
+  display: block;
+  font-size: 0.7rem;
+  opacity: 0.85;
+}
+
+.last-checked time {
+  font-family: var(--mono);
+  color: var(--text);
+}
+
+.global-error {
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.5rem;
+  border-radius: var(--radius);
+  background: rgba(248, 113, 113, 0.12);
+  border: 1px solid rgba(248, 113, 113, 0.35);
+  color: #fecaca;
+  text-align: center;
+}
+
+.sites-grid {
+  display: grid;
+  gap: 1.25rem;
+}
+
+@media (min-width: 640px) {
+  .sites-grid {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  }
+}
+
+.site-card {
+  position: relative;
+  padding: 1.35rem 1.25rem;
+  border-radius: var(--radius);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.site-card--checking {
+  border-color: rgba(167, 139, 250, 0.3);
+}
+
+.site-card--active {
+  border-color: rgba(52, 211, 153, 0.35);
+  box-shadow: 0 0 40px var(--active-glow);
+}
+
+.site-card--paused {
+  border-color: rgba(245, 158, 11, 0.5);
+  box-shadow: 0 0 48px var(--paused-glow);
+}
+
+.site-card--error {
+  border-color: rgba(248, 113, 113, 0.35);
+  box-shadow: 0 0 32px var(--error-glow);
+}
+
+.site-card__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.site-card__label {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.site-card__url {
+  display: block;
+  margin-top: 0.25rem;
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  color: var(--muted);
+  word-break: break-all;
+  text-decoration: none;
+}
+
+.site-card__url:hover {
+  color: var(--accent);
+}
+
+.badge {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.1rem;
+  padding: 0.35rem 0.65rem;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-align: right;
+}
+
+.badge__en {
+  font-size: 0.65rem;
+  font-weight: 400;
+  opacity: 0.9;
+}
+
+.badge--checking {
+  background: rgba(167, 139, 250, 0.2);
+  color: #c4b5fd;
+}
+
+.badge--active {
+  background: rgba(52, 211, 153, 0.2);
+  color: var(--active);
+  animation: pulse-active 2s ease-in-out infinite;
+}
+
+.badge--paused {
+  background: rgba(245, 158, 11, 0.25);
+  color: #fbbf24;
+  animation: pulse-paused 1.5s ease-in-out infinite;
+}
+
+.badge--error {
+  background: rgba(248, 113, 113, 0.2);
+  color: var(--error);
+}
+
+@keyframes pulse-active {
+  0%, 100% { box-shadow: 0 0 0 0 var(--active-glow); }
+  50% { box-shadow: 0 0 12px 2px var(--active-glow); }
+}
+
+@keyframes pulse-paused {
+  0%, 100% { box-shadow: 0 0 0 0 var(--paused-glow); }
+  50% { box-shadow: 0 0 16px 4px var(--paused-glow); }
+}
+
+.site-card__message {
+  margin: 0 0 0.5rem;
+  font-size: 0.9rem;
+}
+
+.site-card__message-en {
+  margin: 0 0 0.75rem;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.site-card__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.25rem;
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  color: var(--muted);
+}
+
+.site-card__reason {
+  margin-top: 0.5rem;
+  font-size: 0.65rem;
+  color: rgba(139, 144, 168, 0.8);
+  font-family: var(--mono);
+}
+
+.skeleton {
+  height: 140px;
+  border-radius: var(--radius);
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.04) 25%,
+    rgba(255, 255, 255, 0.08) 50%,
+    rgba(255, 255, 255, 0.04) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.2s infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.footer {
+  margin-top: 2.5rem;
+  text-align: center;
+}
+
+.footer__label {
+  margin: 0 0 0.2rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.footer__label-en {
+  margin: 0 0 1rem;
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.discord-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.85rem 1.35rem 0.85rem 1.1rem;
+  max-width: 100%;
+  text-decoration: none;
+  color: #fff;
+  background: linear-gradient(135deg, #5865f2 0%, #4752c4 50%, #3c45a5 100%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 14px;
+  box-shadow:
+    0 4px 24px rgba(88, 101, 242, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.discord-link:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 8px 32px rgba(88, 101, 242, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  background: linear-gradient(135deg, #6370f5 0%, #5865f2 50%, #4752c4 100%);
+}
+
+.discord-link:active {
+  transform: translateY(0);
+}
+
+.discord-link__icon {
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+.discord-link__text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.1rem;
+  text-align: left;
+  min-width: 0;
+}
+
+.discord-link__pt {
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.discord-link__en {
+  font-size: 0.72rem;
+  font-weight: 400;
+  opacity: 0.88;
+}
+
+.discord-link__arrow {
+  margin-left: 0.25rem;
+  font-size: 1.1rem;
+  opacity: 0.7;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.discord-link:hover .discord-link__arrow {
+  transform: translateX(4px);
+  opacity: 1;
+}
