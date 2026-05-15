@@ -5,5 +5,19 @@
     "url": "https://seiya2.netlify.app/",
     "platform": "netlify",
     "expectInBody": ["Saint Seiya", "Rebirth"]
+  },
+  {
+    "id": "seiya2-render",
+    "label": "Seiya 2 (Render)",
+    "url": "https://seiya-2gfq.onrender.com/",
+    "platform": "render",
+    "expectInBody": ["Saint Seiya", "Rebirth"]
+  },
+  {
+    "id": "seiya2-workers",
+    "label": "Seiya 2 (Workers)",
+    "url": "https://seiya.rb2ex.workers.dev/",
+    "platform": "cloudflare",
+    "expectInBody": ["Saint Seiya", "Rebirth"]
   }
 ]
